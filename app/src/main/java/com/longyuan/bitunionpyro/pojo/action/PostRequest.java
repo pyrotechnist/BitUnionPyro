@@ -16,6 +16,17 @@ public class PostRequest extends ActionRequestBase {
     @SerializedName("tid")
     private String tid;
 
+    @SerializedName("action")
+    protected String action;
+
+    public void setAction(String action){
+        this.action = action;
+    }
+
+    public String getAction(){
+        return action;
+    }
+
     public void setFrom(String from) {
         this.from = from;
     }
@@ -43,7 +54,7 @@ public class PostRequest extends ActionRequestBase {
     @Override
     public String toString() {
         return
-                "PostRequest{" +
+                "{" +
                         "session = '" + session + '\'' +
                         ",action = '" + action + '\'' +
                         ",username = '" + username + '\'' +

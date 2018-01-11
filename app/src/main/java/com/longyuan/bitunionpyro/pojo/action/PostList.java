@@ -11,7 +11,7 @@ public class PostList{
 	private String result;
 
 	@SerializedName("postlist")
-	private List<PostlistItem> postlist;
+	private List<Post> postlist;
 
 	public void setResult(String result){
 		this.result = result;
@@ -21,11 +21,11 @@ public class PostList{
 		return result;
 	}
 
-	public void setPostlist(List<PostlistItem> postlist){
+	public void setPostlist(List<Post> postlist){
 		this.postlist = postlist;
 	}
 
-	public List<PostlistItem> getPostlist(){
+	public List<Post> getPostlist(){
 		return postlist;
 	}
 

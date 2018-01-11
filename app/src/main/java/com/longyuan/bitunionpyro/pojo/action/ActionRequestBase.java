@@ -9,9 +9,6 @@ public class ActionRequestBase{
 	@SerializedName("session")
 	protected String session;
 
-	@SerializedName("action")
-	protected String action;
-
 	@SerializedName("username")
 	protected String username;
 
@@ -21,14 +18,6 @@ public class ActionRequestBase{
 
 	public String getSession(){
 		return session;
-	}
-
-	public void setAction(String action){
-		this.action = action;
-	}
-
-	public String getAction(){
-		return action;
 	}
 
 	public void setUsername(String username){
@@ -42,9 +31,8 @@ public class ActionRequestBase{
 	@Override
  	public String toString(){
 		return 
-			"ActionRequestBase{" + 
-			"session = '" + session + '\'' + 
-			",action = '" + action + '\'' + 
+			"{" +
+			"session = '" + session + '\'' +
 			",username = '" + username + '\'' + 
 			"}";
 		}

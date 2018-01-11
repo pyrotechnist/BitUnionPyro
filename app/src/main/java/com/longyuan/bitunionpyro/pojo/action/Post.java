@@ -4,7 +4,7 @@ import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
 @Generated("com.robohorse.robopojogenerator")
-public class PostlistItem{
+public class Post {
 
 	@SerializedName("fid")
 	private String fid;
@@ -361,7 +361,7 @@ public class PostlistItem{
 	@Override
  	public String toString(){
 		return 
-			"PostlistItem{" + 
+			"Post{" +
 			"fid = '" + fid + '\'' + 
 			",usesig = '" + usesig + '\'' + 
 			",smileyoff = '" + smileyoff + '\'' + 

@@ -1,23 +1,32 @@
 package com.longyuan.bitunionpyro;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.longyuan.bitunionpyro.api.BUService;
 import com.longyuan.bitunionpyro.injection.DaggerNetworkComponent;
 import com.longyuan.bitunionpyro.injection.NetworkModule;
+import com.longyuan.bitunionpyro.pojo.action.ActionRequestBase;
+import com.longyuan.bitunionpyro.pojo.action.Post;
 import com.longyuan.bitunionpyro.pojo.login.LoginRequest;
+import com.longyuan.bitunionpyro.utils.LastPostListAdapter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -38,6 +47,14 @@ public class LatestPostListActivity extends AppCompatActivity {
     @BindView(R.id.test_text)
     TextView mTextView;
 
+    @BindView(R.id.latest_post_list)
+    RecyclerView mLatestPostList;
+
+    private LastPostListAdapter mLastPostListAdapter;
+
+    private  List<Post> mHomePostList;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +70,8 @@ public class LatestPostListActivity extends AppCompatActivity {
                 .networkModule(new NetworkModule("http://out.bitunion.org/open_api/",getApplicationContext()))
                 .build().inject(this);
 
+        setRecyclerView();
+
         LoginRequest aLoginRequest = new LoginRequest();
 
         aLoginRequest.setAction("login");
@@ -63,11 +82,68 @@ public class LatestPostListActivity extends AppCompatActivity {
         mBUservice.getLogin(aLoginRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(data ->  mTextView.setText(data.getSession()));
+                .subscribe(data ->  getPostList(data.getSession()));
+
+
+
+
+
 
         //mTextView.setText("Hello BU");
     }
 
+    private void setRecyclerView(){
+
+        List<Post> aPostList= new ArrayList();
+
+        mLastPostListAdapter = new LastPostListAdapter(aPostList,this);
+
+        mLatestPostList.setAdapter(mLastPostListAdapter);
+
+        mLatestPostList.setLayoutManager(new LinearLayoutManager(mLatestPostList.getContext()));
+
+        mLatestPostList.setNestedScrollingEnabled(false);
+
+        DividerItemDecoration horizontalDecoration = new DividerItemDecoration(mLatestPostList.getContext(),
+                DividerItemDecoration.VERTICAL);
+
+        //mStoryListAdapter.setOnItemClickListener(new OnItemClickListener.OnStoryItemClickListener() {
+      /*      @Override
+            public void onItemClick(StoryBase item) {
+                Toast.makeText(getApplicationContext(),item.getTitle(),Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(),StoryDetailActivity.class);
+                intent.putExtra(EXTRA_STORY_ID, item.getId());
+
+                intent.putExtra(USE_VOLLEY, false);
+                startActivity(intent);
+
+            }
+
+            @Override
+            public void onItemLongClick(StoryBase item, int position) {
+
+            }
+        });*/
+
+        mLatestPostList.addItemDecoration(horizontalDecoration);
+    }
+
+
+
+    private void getPostList(String session){
+
+        ActionRequestBase aActionRequestBase = new ActionRequestBase();
+
+        aActionRequestBase.setSession(session);
+
+        aActionRequestBase.setUsername("黄色潜水艇");
+
+        mBUservice.getHomePosts(aActionRequestBase)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(data ->  getPostList(data.getSession()));
+
+    }
 
 
     private void setupToolbar(){

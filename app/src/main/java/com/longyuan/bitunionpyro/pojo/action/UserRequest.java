@@ -13,6 +13,17 @@ public class UserRequest extends ActionRequestBase {
     @SerializedName("queryusername")
     private String queryusername;
 
+    @SerializedName("action")
+    protected String action;
+
+    public void setAction(String action){
+        this.action = action;
+    }
+
+    public String getAction(){
+        return action;
+    }
+
     public void setUid(String uid) {
         this.uid = uid;
     }
