@@ -2,6 +2,7 @@ package com.longyuan.bitunionpyro.utils;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import com.longyuan.bitunionpyro.R;
 import com.longyuan.bitunionpyro.pojo.action.NewlistItem;
 import com.longyuan.bitunionpyro.pojo.action.Post;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 
 import butterknife.BindView;
@@ -41,16 +44,14 @@ public class LastPostListAdapter extends RecyclerView.Adapter<LastPostListAdapte
     }
 
     @Override
-    public void onBindViewHolder(LastPostListViewHolder holder, int position) {
+    public void onBindViewHolder(LastPostListViewHolder holder, int position){
 
         final NewlistItem aPost = mPostList.get(position);
+        holder.textView1.setText(HtmlHelper.urlDecode(aPost.getPname()));
 
-        holder.textView1.setText(aPost.getPname());
+        holder.textView2.setText(HtmlHelper.urlDecode(aPost.getFname()));
 
-        holder.textView2.setText(aPost.getFname());
-
-        holder.textView3.setText(aPost.getAuthor());
-
+        holder.textView3.setText(HtmlHelper.urlDecode(aPost.getAuthor()));
 
     }
 
@@ -65,6 +66,7 @@ public class LastPostListAdapter extends RecyclerView.Adapter<LastPostListAdapte
 
         notifyDataSetChanged();
     }
+
 
     public static class LastPostListViewHolder extends RecyclerView.ViewHolder{
 

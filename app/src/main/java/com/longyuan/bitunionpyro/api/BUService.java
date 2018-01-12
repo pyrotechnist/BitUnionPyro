@@ -24,9 +24,9 @@ public interface BUService {
     Observable<LoginResponse> getLogin(@Body LoginRequest request);
 
 
-    @POST("/bu_forum.php")
+    @POST("bu_forum.php")
     Observable<PostList> getPosts(@Body LoginRequest request,@QueryMap Map<String, String> options);
 
-    @POST("/bu_home.php")
+    @POST("bu_home.php")
     Observable<LatestPostList> getHomePosts(@Body ActionRequestBase request);
 }
