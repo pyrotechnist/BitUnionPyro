@@ -20,6 +20,7 @@ import com.longyuan.bitunionpyro.api.BUService;
 import com.longyuan.bitunionpyro.injection.DaggerNetworkComponent;
 import com.longyuan.bitunionpyro.injection.NetworkModule;
 import com.longyuan.bitunionpyro.pojo.action.ActionRequestBase;
+import com.longyuan.bitunionpyro.pojo.action.NewlistItem;
 import com.longyuan.bitunionpyro.pojo.action.Post;
 import com.longyuan.bitunionpyro.pojo.login.LoginRequest;
 import com.longyuan.bitunionpyro.utils.LastPostListAdapter;
@@ -52,7 +53,7 @@ public class LatestPostListActivity extends AppCompatActivity {
 
     private LastPostListAdapter mLastPostListAdapter;
 
-    private  List<Post> mHomePostList;
+    private  List<NewlistItem> mHomePostList;
 
 
     @Override
@@ -94,7 +95,7 @@ public class LatestPostListActivity extends AppCompatActivity {
 
     private void setRecyclerView(){
 
-        List<Post> aPostList= new ArrayList();
+        List<NewlistItem> aPostList= new ArrayList();
 
         mLastPostListAdapter = new LastPostListAdapter(aPostList,this);
 
@@ -141,8 +142,7 @@ public class LatestPostListActivity extends AppCompatActivity {
         mBUservice.getHomePosts(aActionRequestBase)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(data ->  getPostList(data.getSession()));
-
+                .subscribe(data ->  mLastPostListAdapter.updateData(data.getNewlist()));
     }
 
 

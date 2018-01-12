@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.longyuan.bitunionpyro.R;
+import com.longyuan.bitunionpyro.pojo.action.NewlistItem;
 import com.longyuan.bitunionpyro.pojo.action.Post;
 
 import java.util.List;
@@ -22,11 +23,11 @@ import retrofit2.http.POST;
 
 public class LastPostListAdapter extends RecyclerView.Adapter<LastPostListAdapter.LastPostListViewHolder> {
 
-    private List<Post> mPostList;
+    private List<NewlistItem> mPostList;
 
     private Context mContext;
 
-    public LastPostListAdapter(List<Post> mPostList, Context mContext) {
+    public LastPostListAdapter(List<NewlistItem> mPostList, Context mContext) {
         this.mPostList = mPostList;
         this.mContext = mContext;
     }
@@ -42,13 +43,13 @@ public class LastPostListAdapter extends RecyclerView.Adapter<LastPostListAdapte
     @Override
     public void onBindViewHolder(LastPostListViewHolder holder, int position) {
 
-        final Post aPost = mPostList.get(position);
+        final NewlistItem aPost = mPostList.get(position);
 
-        holder.textView1.setText(aPost.getMessage());
+        holder.textView1.setText(aPost.getPname());
 
-        holder.textView2.setText(aPost.getAuthor());
+        holder.textView2.setText(aPost.getFname());
 
-        holder.textView3.setText(aPost.getDateline());
+        holder.textView3.setText(aPost.getAuthor());
 
 
     }
@@ -56,6 +57,13 @@ public class LastPostListAdapter extends RecyclerView.Adapter<LastPostListAdapte
     @Override
     public int getItemCount() {
         return mPostList.size();
+    }
+
+    public void updateData(List<NewlistItem> postList){
+
+        mPostList = postList;
+
+        notifyDataSetChanged();
     }
 
     public static class LastPostListViewHolder extends RecyclerView.ViewHolder{

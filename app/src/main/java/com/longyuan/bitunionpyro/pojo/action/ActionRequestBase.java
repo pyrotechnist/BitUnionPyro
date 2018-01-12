@@ -33,7 +33,7 @@ public class ActionRequestBase{
 		return 
 			"{" +
 			"session = '" + session + '\'' +
-			",username = '" + username + '\'' + 
+			",username = '" + username + '\'' +
 			"}";
 		}
 }

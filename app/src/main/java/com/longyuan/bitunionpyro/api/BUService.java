@@ -1,6 +1,7 @@
 package com.longyuan.bitunionpyro.api;
 
 import com.longyuan.bitunionpyro.pojo.action.ActionRequestBase;
+import com.longyuan.bitunionpyro.pojo.action.LatestPostList;
 import com.longyuan.bitunionpyro.pojo.action.PostList;
 import com.longyuan.bitunionpyro.pojo.login.LoginRequest;
 import com.longyuan.bitunionpyro.pojo.login.LoginResponse;
@@ -27,5 +28,5 @@ public interface BUService {
     Observable<PostList> getPosts(@Body LoginRequest request,@QueryMap Map<String, String> options);
 
     @POST("/bu_home.php")
-    Observable<PostList> getHomePosts(@Body ActionRequestBase request);
+    Observable<LatestPostList> getHomePosts(@Body ActionRequestBase request);
 }
