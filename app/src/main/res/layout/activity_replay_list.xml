@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.longyuan.bitunionpyro.LatestPostListActivity"
-    tools:showIn="@layout/activity_latest_post_list">
+    tools:context="com.longyuan.bitunionpyro.ReplayList.ReplyListActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/latest_post_list"
+        android:id="@+id/reply_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
+
 
 </android.support.constraint.ConstraintLayout>

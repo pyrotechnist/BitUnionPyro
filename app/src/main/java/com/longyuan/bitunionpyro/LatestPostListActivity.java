@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
+import com.longyuan.bitunionpyro.ReplayList.ReplyListActivity;
 import com.longyuan.bitunionpyro.api.BUService;
 import com.longyuan.bitunionpyro.injection.DaggerNetworkComponent;
 import com.longyuan.bitunionpyro.injection.NetworkModule;
@@ -24,6 +25,7 @@ import com.longyuan.bitunionpyro.pojo.action.NewlistItem;
 import com.longyuan.bitunionpyro.pojo.action.Post;
 import com.longyuan.bitunionpyro.pojo.login.LoginRequest;
 import com.longyuan.bitunionpyro.utils.LastPostListAdapter;
+import com.longyuan.bitunionpyro.utils.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +39,9 @@ import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static com.longyuan.bitunionpyro.ReplayList.ReplyListActivity.EXTRA_POST_ID;
+import static com.longyuan.bitunionpyro.ReplayList.ReplyListActivity.EXTRA_SESSION_ID;
+
 public class LatestPostListActivity extends AppCompatActivity {
 
     @Inject
@@ -45,15 +50,14 @@ public class LatestPostListActivity extends AppCompatActivity {
     @Inject
     BUService mBUservice;
 
-    @BindView(R.id.test_text)
-    TextView mTextView;
-
     @BindView(R.id.latest_post_list)
     RecyclerView mLatestPostList;
 
     private LastPostListAdapter mLastPostListAdapter;
 
     private  List<NewlistItem> mHomePostList;
+
+    private  String  mSession;
 
 
     @Override
@@ -108,6 +112,26 @@ public class LatestPostListActivity extends AppCompatActivity {
         DividerItemDecoration horizontalDecoration = new DividerItemDecoration(mLatestPostList.getContext(),
                 DividerItemDecoration.VERTICAL);
 
+
+        mLastPostListAdapter.setOnItemClickListener(new OnItemClickListener.OnPostItemClickListener() {
+            @Override
+            public void onItemClick(NewlistItem item) {
+                //Toast.makeText(getApplicationContext(),item.getTitle(),Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(),ReplyListActivity.class);
+                intent.putExtra(EXTRA_POST_ID, item.getTid());
+
+                intent.putExtra(EXTRA_SESSION_ID, mSession);
+
+                startActivity(intent);
+
+            }
+
+          /*  @Override
+            public void onItemLongClick(Story item, int position) {
+
+            }*/
+        });
+
         //mStoryListAdapter.setOnItemClickListener(new OnItemClickListener.OnStoryItemClickListener() {
       /*      @Override
             public void onItemClick(StoryBase item) {
@@ -132,6 +156,8 @@ public class LatestPostListActivity extends AppCompatActivity {
 
 
     private void getPostList(String session){
+
+        mSession = session;
 
         ActionRequestBase aActionRequestBase = new ActionRequestBase();
 

@@ -1,6 +1,7 @@
 package com.longyuan.bitunionpyro.injection;
 
 import com.longyuan.bitunionpyro.LatestPostListActivity;
+import com.longyuan.bitunionpyro.ReplayList.ReplyListActivity;
 import com.longyuan.bitunionpyro.login.LoginActivity;
 
 import javax.inject.Singleton;
@@ -18,6 +19,9 @@ public interface NetworkComponent {
     void inject(LatestPostListActivity latestPostListActivity);
 
     void inject(LoginActivity loginActivity);
+
+    void inject(ReplyListActivity replyListActivity);
+
 
 
 }
