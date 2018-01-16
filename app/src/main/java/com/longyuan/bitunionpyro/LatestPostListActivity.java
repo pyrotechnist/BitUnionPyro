@@ -20,6 +20,7 @@ import com.longyuan.bitunionpyro.ReplayList.ReplyListActivity;
 import com.longyuan.bitunionpyro.api.BUService;
 import com.longyuan.bitunionpyro.injection.DaggerNetworkComponent;
 import com.longyuan.bitunionpyro.injection.NetworkModule;
+import com.longyuan.bitunionpyro.login.LoginActivity;
 import com.longyuan.bitunionpyro.pojo.action.ActionRequestBase;
 import com.longyuan.bitunionpyro.pojo.action.NewlistItem;
 import com.longyuan.bitunionpyro.pojo.action.Post;
@@ -205,6 +206,10 @@ public class LatestPostListActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+
+
+            startActivity(intent);
             return true;
         }
 
