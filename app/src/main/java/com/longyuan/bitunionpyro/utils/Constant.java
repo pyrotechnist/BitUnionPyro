@@ -12,6 +12,8 @@ public class Constant {
 
     public static final String  DEFAULT_BU_URL= "http://out.bitunion.org/";
 
+    public static final String  DEFAULT_BU_URL_OUT= "http://out.bitunion.org/";
+
     public static final String  REPLIED= " 回复了帖子";
 
     public static final String  REPLY= " 回复";
