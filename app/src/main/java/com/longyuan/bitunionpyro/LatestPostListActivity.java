@@ -9,6 +9,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,9 +23,11 @@ import com.longyuan.bitunionpyro.injection.DaggerNetworkComponent;
 import com.longyuan.bitunionpyro.injection.NetworkModule;
 import com.longyuan.bitunionpyro.login.LoginActivity;
 import com.longyuan.bitunionpyro.pojo.action.ActionRequestBase;
+import com.longyuan.bitunionpyro.pojo.action.LatestPostList;
 import com.longyuan.bitunionpyro.pojo.action.NewlistItem;
 import com.longyuan.bitunionpyro.pojo.action.Post;
 import com.longyuan.bitunionpyro.pojo.login.LoginRequest;
+import com.longyuan.bitunionpyro.pojo.login.LoginResponse;
 import com.longyuan.bitunionpyro.utils.LastPostListAdapter;
 import com.longyuan.bitunionpyro.utils.OnItemClickListener;
 
@@ -38,10 +41,17 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 import static com.longyuan.bitunionpyro.ReplayList.ReplyListActivity.EXTRA_POST_ID;
 import static com.longyuan.bitunionpyro.ReplayList.ReplyListActivity.EXTRA_SESSION_ID;
+import static com.longyuan.bitunionpyro.utils.Constant.PREF_PASSWORD;
+import static com.longyuan.bitunionpyro.utils.Constant.PREF_SESSION;
+import static com.longyuan.bitunionpyro.utils.Constant.PREF_USER_NAME;
+import static com.longyuan.bitunionpyro.utils.LogHelper.LogInfo;
+import static com.longyuan.bitunionpyro.utils.SharedPreferencesHelper.getPrefValue;
+import static com.longyuan.bitunionpyro.utils.SharedPreferencesHelper.setPrefValue;
 
 public class LatestPostListActivity extends AppCompatActivity {
 
@@ -78,24 +88,37 @@ public class LatestPostListActivity extends AppCompatActivity {
 
         setRecyclerView();
 
-        LoginRequest aLoginRequest = new LoginRequest();
+        String session = getPrefValue(this,PREF_SESSION);
 
-        aLoginRequest.setAction("login");
+        if( session == null || session.equals("")){
 
-        aLoginRequest.setUsername("黄色潜水艇");
-        aLoginRequest.setPassword("barcainiesta");
+            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
-        mBUservice.getLogin(aLoginRequest)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(data ->  getPostList(data.getSession()));
-
-
+        getPostList(session);
+    }
 
 
+    private void handleError(Throwable error ){
 
+        Log.d("test",error.getLocalizedMessage());
+    }
 
-        //mTextView.setText("Hello BU");
+    private String checkSession(LoginResponse loginResponse){
+        if(!loginResponse.getResult().equals("success" ))
+        {
+           LogInfo("test",loginResponse.toString());
+            return null;
+        }else
+        {
+            LogInfo("test",loginResponse.toString());
+
+            setPrefValue(this,PREF_SESSION,loginResponse.getSession());
+            return loginResponse.getSession();
+        }
+
     }
 
     private void setRecyclerView(){
@@ -162,14 +185,27 @@ public class LatestPostListActivity extends AppCompatActivity {
 
         ActionRequestBase aActionRequestBase = new ActionRequestBase();
 
-        aActionRequestBase.setSession(session);
+        aActionRequestBase.setSession(getPrefValue(this,PREF_SESSION));
 
         aActionRequestBase.setUsername("黄色潜水艇");
 
         mBUservice.getHomePosts(aActionRequestBase)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(data ->  mLastPostListAdapter.updateData(data.getNewlist()));
+               // .map(data -> checkLatestPOstList(data))
+                .subscribe(data ->  updateData(data),throwable -> LogInfo("",throwable.getLocalizedMessage()));
+    }
+
+
+    private void updateData(LatestPostList latestPostList){
+        if(!latestPostList.getResult().equals("success"))
+        {
+            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }else {
+            mLastPostListAdapter.updateData(latestPostList.getNewlist());
+        }
     }
 
 
@@ -206,13 +242,44 @@ public class LatestPostListActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
 
-
-            startActivity(intent);
             return true;
+        }
+        else if(id == R.id.action_logout)
+        {
+            logout();
+
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void logout() {
+
+        LoginRequest aLoginRequest = new LoginRequest();
+
+        aLoginRequest.setAction("logout");
+        aLoginRequest.setSession(getPrefValue(this,PREF_SESSION));
+        aLoginRequest.setUsername(getPrefValue(this,PREF_USER_NAME));
+        aLoginRequest.setPassword(getPrefValue(this,PREF_PASSWORD));
+
+        mBUservice.getLogin(aLoginRequest).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                // .map(data -> checkLatestPOstList(data))
+                .subscribe(data ->  handleLogoutData(data),
+                        throwable -> LogInfo("",throwable.getLocalizedMessage()));
+
+    }
+
+    private void handleLogoutData(LoginResponse loginResponse){
+        if(loginResponse.getResult().equals("success")){
+            setPrefValue(this,PREF_SESSION,"");
+            setPrefValue(this,PREF_PASSWORD,"");
+
+            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
 }

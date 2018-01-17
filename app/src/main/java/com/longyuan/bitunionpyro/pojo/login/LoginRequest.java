@@ -15,6 +15,9 @@ public class LoginRequest{
 	@SerializedName("username")
 	private String username;
 
+	@SerializedName("session")
+	private String session;
+
 	public void setPassword(String password){
 		this.password = password;
 	}
@@ -37,6 +40,14 @@ public class LoginRequest{
 
 	public String getUsername(){
 		return username;
+	}
+
+	public String getSession() {
+		return session;
+	}
+
+	public void setSession(String session) {
+		this.session = session;
 	}
 
 	@Override
