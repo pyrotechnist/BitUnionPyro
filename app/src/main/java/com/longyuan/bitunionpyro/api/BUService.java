@@ -5,6 +5,8 @@ import com.longyuan.bitunionpyro.pojo.action.LatestPostList;
 import com.longyuan.bitunionpyro.pojo.action.PostList;
 import com.longyuan.bitunionpyro.pojo.action.reply.ReplyList;
 import com.longyuan.bitunionpyro.pojo.action.reply.ReplyRequest;
+import com.longyuan.bitunionpyro.pojo.action.userDetails.UserDetailsRequest;
+import com.longyuan.bitunionpyro.pojo.action.userDetails.UserDetailsResponse;
 import com.longyuan.bitunionpyro.pojo.login.LoginRequest;
 import com.longyuan.bitunionpyro.pojo.login.LoginResponse;
 
@@ -25,7 +27,6 @@ public interface BUService {
     @POST("bu_logging.php")
     Observable<LoginResponse> getLogin(@Body LoginRequest request);
 
-
     @POST("bu_forum.php")
     Observable<PostList> getPosts(@Body LoginRequest request,@QueryMap Map<String, String> options);
 
@@ -35,6 +36,7 @@ public interface BUService {
     @POST("bu_post.php")
     Observable<ReplyList> getReplies(@Body ReplyRequest request);
 
-
+    @POST("bu_profile.php")
+    Observable<UserDetailsResponse> getUserDetails(@Body UserDetailsRequest request);
 
 }

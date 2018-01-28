@@ -95,7 +95,10 @@ public class ReplyListAdapter extends RecyclerView.Adapter<ReplyListAdapter.Repl
 
     @Override
     public int getItemCount() {
-        return mReplyList.size();
+        if(mReplyList != null){
+            return mReplyList.size();
+        }else
+        return 0;
     }
 
     public void updateData(List<ReplyItem> postList){

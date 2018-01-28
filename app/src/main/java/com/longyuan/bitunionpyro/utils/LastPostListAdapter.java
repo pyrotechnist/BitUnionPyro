@@ -1,6 +1,7 @@
 package com.longyuan.bitunionpyro.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
@@ -9,12 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.longyuan.bitunionpyro.LatestPostListActivity;
 import com.longyuan.bitunionpyro.R;
 import com.longyuan.bitunionpyro.pojo.action.Lastreply;
 import com.longyuan.bitunionpyro.pojo.action.NewlistItem;
 import com.longyuan.bitunionpyro.pojo.action.Post;
+import com.longyuan.bitunionpyro.userdetails.UserdetailsActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -24,6 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.http.POST;
 
+import static com.longyuan.bitunionpyro.userdetails.UserdetailsActivity.EXTRA_USER_NAME;
 import static com.longyuan.bitunionpyro.utils.Constant.REPLIED;
 import static com.longyuan.bitunionpyro.utils.Constant.REPLY;
 import static com.longyuan.bitunionpyro.utils.HtmlHelper.avatarUrlUpdate;
@@ -81,6 +86,19 @@ public class LastPostListAdapter extends RecyclerView.Adapter<LastPostListAdapte
             @Override
             public void onClick(View v) {
                 mOnItemClickListener.onItemClick(aPost);
+            }
+        });
+
+        holder.aImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext,UserdetailsActivity.class);
+
+                intent.putExtra(EXTRA_USER_NAME,aPost.getAuthor());
+
+                mContext.startActivity(intent);
+
+                Toast.makeText(mContext,"Click test",Toast.LENGTH_LONG).show();
             }
         });
 

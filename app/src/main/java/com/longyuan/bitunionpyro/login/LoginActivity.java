@@ -67,9 +67,16 @@ public class LoginActivity extends AppCompatActivity {
 
         mUserName = getPrefValue(this,PREF_USER_NAME);
 
+        mPassword = getPrefValue(this,PREF_PASSWORD);
+
         if(mUserName != null &&  !mUserName.equals(""))
         {
             mEditText_name.setText(mUserName);
+        }
+
+        if(mPassword != null &&  !mPassword.equals(""))
+        {
+            mEditText_password.setText(mPassword);
         }
 
     }

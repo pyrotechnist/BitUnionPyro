@@ -20,6 +20,10 @@ public class Constant {
 
     public static final String  AUTHOR= " 作者 :";
 
+    public static final String  RESULT_SUCCESS= "success";
+
+
+
 
     // 系统配置
     public final static String PREF_USER_NAME = "PREF_USER_NAME";
