@@ -1,6 +1,6 @@
 package com.longyuan.bitunionpyro.injection;
 
-import com.longyuan.bitunionpyro.LatestPostListActivity;
+import com.longyuan.bitunionpyro.HomeActivity;
 import com.longyuan.bitunionpyro.ReplayList.ReplyListActivity;
 import com.longyuan.bitunionpyro.login.LoginActivity;
 import com.longyuan.bitunionpyro.userdetails.UserdetailsActivity;
@@ -17,7 +17,7 @@ import dagger.Component;
 @Component(modules = {NetworkModule.class})
 public interface NetworkComponent {
 
-    void inject(LatestPostListActivity latestPostListActivity);
+    void inject(HomeActivity homeActivity);
 
     void inject(LoginActivity loginActivity);
 

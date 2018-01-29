@@ -3,7 +3,6 @@ package com.longyuan.bitunionpyro.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,23 +12,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.longyuan.bitunionpyro.LatestPostListActivity;
 import com.longyuan.bitunionpyro.R;
 import com.longyuan.bitunionpyro.pojo.action.Lastreply;
 import com.longyuan.bitunionpyro.pojo.action.NewlistItem;
-import com.longyuan.bitunionpyro.pojo.action.Post;
 import com.longyuan.bitunionpyro.userdetails.UserdetailsActivity;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.http.POST;
 
 import static com.longyuan.bitunionpyro.userdetails.UserdetailsActivity.EXTRA_USER_NAME;
-import static com.longyuan.bitunionpyro.utils.Constant.REPLIED;
 import static com.longyuan.bitunionpyro.utils.Constant.REPLY;
 import static com.longyuan.bitunionpyro.utils.HtmlHelper.avatarUrlUpdate;
 

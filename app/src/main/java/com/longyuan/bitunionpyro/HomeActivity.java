@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,8 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.longyuan.bitunionpyro.ReplayList.ReplyListActivity;
@@ -25,23 +24,19 @@ import com.longyuan.bitunionpyro.login.LoginActivity;
 import com.longyuan.bitunionpyro.pojo.action.ActionRequestBase;
 import com.longyuan.bitunionpyro.pojo.action.LatestPostList;
 import com.longyuan.bitunionpyro.pojo.action.NewlistItem;
-import com.longyuan.bitunionpyro.pojo.action.Post;
 import com.longyuan.bitunionpyro.pojo.login.LoginRequest;
 import com.longyuan.bitunionpyro.pojo.login.LoginResponse;
 import com.longyuan.bitunionpyro.utils.LastPostListAdapter;
 import com.longyuan.bitunionpyro.utils.OnItemClickListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 import static com.longyuan.bitunionpyro.ReplayList.ReplyListActivity.EXTRA_POST_ID;
@@ -53,7 +48,7 @@ import static com.longyuan.bitunionpyro.utils.LogHelper.LogInfo;
 import static com.longyuan.bitunionpyro.utils.SharedPreferencesHelper.getPrefValue;
 import static com.longyuan.bitunionpyro.utils.SharedPreferencesHelper.setPrefValue;
 
-public class LatestPostListActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
 
     @Inject
     RequestQueue mRequestQueue;
@@ -64,17 +59,22 @@ public class LatestPostListActivity extends AppCompatActivity {
     @BindView(R.id.latest_post_list)
     RecyclerView mLatestPostList;
 
+    @BindView(R.id.refresh_home)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
     private LastPostListAdapter mLastPostListAdapter;
 
     private  List<NewlistItem> mHomePostList;
 
     private  String  mSession;
 
+    private boolean mIsSwipeRefresh;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_latest_post_list);
+        setContentView(R.layout.activity_home);
 
         setupToolbar();
 
@@ -86,6 +86,7 @@ public class LatestPostListActivity extends AppCompatActivity {
                 .networkModule(new NetworkModule("http://out.bitunion.org/open_api/",getApplicationContext()))
                 .build().inject(this);
 
+        setSwipeRefresh();
         setRecyclerView();
 
         String session = getPrefValue(this,PREF_SESSION);
@@ -98,6 +99,18 @@ public class LatestPostListActivity extends AppCompatActivity {
         }
 
         getPostList(session);
+    }
+
+    private void setSwipeRefresh() {
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mIsSwipeRefresh = true;
+                getPostList(getPrefValue(getApplicationContext(),PREF_SESSION));
+            }
+        });
+
     }
 
 
@@ -178,8 +191,15 @@ public class LatestPostListActivity extends AppCompatActivity {
     }
 
 
-
     private void getPostList(String session){
+
+        getPostList(session,false);
+
+
+
+    }
+
+    private void getPostList(String session,boolean isSwipeRefresh){
 
         mSession = session;
 
@@ -188,6 +208,8 @@ public class LatestPostListActivity extends AppCompatActivity {
         aActionRequestBase.setSession(getPrefValue(this,PREF_SESSION));
 
         aActionRequestBase.setUsername("黄色潜水艇");
+
+        mSwipeRefreshLayout.setRefreshing(false);
 
         mBUservice.getHomePosts(aActionRequestBase)
                 .subscribeOn(Schedulers.io())
@@ -205,6 +227,7 @@ public class LatestPostListActivity extends AppCompatActivity {
             finish();
         }else {
             mLastPostListAdapter.updateData(latestPostList.getNewlist());
+
         }
     }
 
