@@ -24,10 +24,14 @@ import com.longyuan.bitunionpyro.login.LoginActivity;
 import com.longyuan.bitunionpyro.pojo.action.ActionRequestBase;
 import com.longyuan.bitunionpyro.pojo.action.LatestPostList;
 import com.longyuan.bitunionpyro.pojo.action.NewlistItem;
+import com.longyuan.bitunionpyro.pojo.action.reply.ReplyList;
+import com.longyuan.bitunionpyro.pojo.action.reply.ReplyRequest;
 import com.longyuan.bitunionpyro.pojo.login.LoginRequest;
 import com.longyuan.bitunionpyro.pojo.login.LoginResponse;
+import com.longyuan.bitunionpyro.utils.Constant;
 import com.longyuan.bitunionpyro.utils.LastPostListAdapter;
 import com.longyuan.bitunionpyro.utils.OnItemClickListener;
+import com.longyuan.bitunionpyro.utils.SharedPreferencesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -49,6 +54,9 @@ import static com.longyuan.bitunionpyro.utils.SharedPreferencesHelper.getPrefVal
 import static com.longyuan.bitunionpyro.utils.SharedPreferencesHelper.setPrefValue;
 
 public class HomeActivity extends AppCompatActivity {
+
+    // Tags
+    private final static String TAG = HomeActivity.class.getSimpleName();
 
     @Inject
     RequestQueue mRequestQueue;
@@ -212,10 +220,56 @@ public class HomeActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setRefreshing(false);
 
         mBUservice.getHomePosts(aActionRequestBase)
+                .flatMap(data-> checkandUpdateData(data))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                // .map(data -> checkLatestPOstList(data))
                 .subscribe(data ->  updateData(data),throwable -> LogInfo("",throwable.getLocalizedMessage()));
+    }
+
+
+
+    private Observable<LatestPostList> checkandUpdateData(LatestPostList data) {
+        if(data.getResult().equals(Constant.RESULT_SUCCESS)) {
+
+            LogInfo(TAG, "Session OK,  data loaded");
+            return Observable.just(data);
+            // mReplyListAdapter.updateData(data.getPostlist());
+
+        }else
+        {
+            LogInfo(TAG, "Session expired, try to get session again");
+
+            LoginRequest aLoginRequest = new LoginRequest();
+
+            aLoginRequest.setAction("login");
+
+            aLoginRequest.setUsername(SharedPreferencesHelper.getPrefValue(this,Constant.PREF_USER_NAME));
+
+            aLoginRequest.setPassword(SharedPreferencesHelper.getPrefValue(this,Constant.PREF_PASSWORD));
+
+            return mBUservice
+                    .getLogin(aLoginRequest)
+                    .map(loginResponse -> generateReplyRequest(loginResponse))
+                    .flatMap(actionRequest -> mBUservice.getHomePosts(actionRequest));
+
+            //return Observable.just(data);
+            //loadData(true);
+
+        }
+    }
+
+    private ActionRequestBase generateReplyRequest(LoginResponse loginResponse) {
+
+        ActionRequestBase aActionRequestBase = new ActionRequestBase();
+
+        aActionRequestBase.setSession(loginResponse.getSession());
+
+        aActionRequestBase.setUsername("黄色潜水艇");
+
+        setPrefValue(this, PREF_SESSION, loginResponse.getSession());
+
+        return aActionRequestBase;
     }
 
 
