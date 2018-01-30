@@ -44,6 +44,7 @@ public class UserDetailsFragment extends Fragment {
     private String mParam2;
 
 
+
     @BindView(R.id.textView)
     TextView mTextView;
 
@@ -67,7 +68,7 @@ public class UserDetailsFragment extends Fragment {
     BUService mBUservice;
 
 
-    // private OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionListener mListener;
 
     public UserDetailsFragment() {
         // Required empty public constructor
@@ -148,6 +149,9 @@ public class UserDetailsFragment extends Fragment {
         mTextView4.setText(data.getMemberinfo().getBday());
         mTextView5.setText(data.getMemberinfo().getEmail());
         mTextView6.setText(data.getMemberinfo().getSite());
+
+        mListener.onFragmentInteraction(data.getMemberinfo().getAvatar(),data.getMemberinfo().getSignature());
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -160,18 +164,18 @@ public class UserDetailsFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-       /* if (context instanceof OnFragmentInteractionListener) {
+        if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
-        }*/
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-       // mListener = null;
+        mListener = null;
     }
 
     /**
@@ -184,8 +188,8 @@ public class UserDetailsFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-/*    public interface OnFragmentInteractionListener {
+    public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }*/
+        void onFragmentInteraction(String url, String signature);
+    }
 }

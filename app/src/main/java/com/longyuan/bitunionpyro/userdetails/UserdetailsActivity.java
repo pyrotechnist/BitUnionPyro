@@ -1,5 +1,6 @@
 package com.longyuan.bitunionpyro.userdetails;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,8 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.longyuan.bitunionpyro.R;
 import com.longyuan.bitunionpyro.api.BUService;
 import com.longyuan.bitunionpyro.injection.DaggerNetworkComponent;
@@ -33,7 +36,7 @@ import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class UserdetailsActivity extends AppCompatActivity {
+public class UserdetailsActivity extends AppCompatActivity implements UserDetailsFragment.OnFragmentInteractionListener {
 
 
     public static final String EXTRA_USER_NAME = "USER_NAME";
@@ -42,8 +45,13 @@ public class UserdetailsActivity extends AppCompatActivity {
     BUService mBUservice;
 
 
-    @BindView(R.id.textView_user_id)
-    TextView mTextView_UserId;
+    @BindView(R.id.textView_signature)
+    TextView mTextView_signature;
+
+    @BindView(R.id.imageView_logo)
+    ImageView mImageView_logo;
+
+
 
     String mUserName;
 
@@ -53,6 +61,7 @@ public class UserdetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_userdetails);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // View Injection
         ButterKnife.bind(this);
@@ -161,8 +170,16 @@ public class UserdetailsActivity extends AppCompatActivity {
     }
 
     private void updateData(UserDetailsResponse data) {
-        mTextView_UserId.setText(data.getMemberinfo().getUid());
+
     }
 
+    @Override
+    public void onFragmentInteraction(String url, String signature) {
 
+        mTextView_signature.setText(signature);
+
+//        Glide.with(getApplicationContext()).load(url).into(mImageView_logo);
+
+
+    }
 }
