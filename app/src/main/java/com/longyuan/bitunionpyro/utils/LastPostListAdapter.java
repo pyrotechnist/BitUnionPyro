@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.longyuan.bitunionpyro.R;
 import com.longyuan.bitunionpyro.pojo.action.Lastreply;
 import com.longyuan.bitunionpyro.pojo.action.NewlistItem;
@@ -22,6 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.longyuan.bitunionpyro.userdetails.UserdetailsActivity.EXTRA_USER_AVATAR;
 import static com.longyuan.bitunionpyro.userdetails.UserdetailsActivity.EXTRA_USER_NAME;
 import static com.longyuan.bitunionpyro.utils.Constant.REPLY;
 import static com.longyuan.bitunionpyro.utils.HtmlHelper.avatarUrlUpdate;
@@ -71,7 +73,9 @@ public class LastPostListAdapter extends RecyclerView.Adapter<LastPostListAdapte
 
         holder.aTextView_forum.setText(HtmlHelper.urlDecode(aPost.getFname() + " : " + aPost.getTidSum() + REPLY));
 
-            Glide.with(mContext).load(avatarUrlUpdate(HtmlHelper.urlDecode(aPost.getAvatar()))).into(holder.aImageView);
+        String logoUrl = avatarUrlUpdate(HtmlHelper.urlDecode(aPost.getAvatar()));
+
+            Glide.with(mContext).load(logoUrl).diskCacheStrategy( DiskCacheStrategy.SOURCE ).into(holder.aImageView);
             Log.d("IMage",HtmlHelper.urlDecode(aPost.getAvatar()));
             Log.d("IMage",avatarUrlUpdate(HtmlHelper.urlDecode(aPost.getAvatar())));
 
@@ -89,9 +93,9 @@ public class LastPostListAdapter extends RecyclerView.Adapter<LastPostListAdapte
 
                 intent.putExtra(EXTRA_USER_NAME,aPost.getAuthor());
 
-                mContext.startActivity(intent);
+                intent.putExtra(EXTRA_USER_AVATAR,logoUrl);
 
-                Toast.makeText(mContext,"Click test",Toast.LENGTH_LONG).show();
+                mContext.startActivity(intent);
             }
         });
 

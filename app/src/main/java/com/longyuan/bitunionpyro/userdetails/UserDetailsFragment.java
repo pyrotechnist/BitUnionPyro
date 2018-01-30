@@ -13,9 +13,11 @@ import com.longyuan.bitunionpyro.R;
 import com.longyuan.bitunionpyro.api.BUService;
 import com.longyuan.bitunionpyro.injection.DaggerNetworkComponent;
 import com.longyuan.bitunionpyro.injection.NetworkModule;
+import com.longyuan.bitunionpyro.pojo.action.userDetails.Memberinfo;
 import com.longyuan.bitunionpyro.pojo.action.userDetails.UserDetailsRequest;
 import com.longyuan.bitunionpyro.pojo.action.userDetails.UserDetailsResponse;
 import com.longyuan.bitunionpyro.utils.Constant;
+import com.longyuan.bitunionpyro.utils.HtmlHelper;
 import com.longyuan.bitunionpyro.utils.SharedPreferencesHelper;
 
 import javax.inject.Inject;
@@ -143,12 +145,15 @@ public class UserDetailsFragment extends Fragment {
     }
 
     private void updateData(UserDetailsResponse data) {
-        mTextView.setText(data.getMemberinfo().getPostnum());
-        mTextView2.setText(data.getMemberinfo().getThreadnum());
-        mTextView3.setText(data.getMemberinfo().getCredit());
-        mTextView4.setText(data.getMemberinfo().getBday());
-        mTextView5.setText(data.getMemberinfo().getEmail());
-        mTextView6.setText(data.getMemberinfo().getSite());
+
+        Memberinfo memberinfo = data.getMemberinfo();
+
+        mTextView.setText(memberinfo.getPostnum());
+        mTextView2.setText(memberinfo.getThreadnum());
+        mTextView3.setText(memberinfo.getCredit());
+        mTextView4.setText(memberinfo.getBday());
+        mTextView5.setText(HtmlHelper.urlDecode(memberinfo.getEmail()));
+        mTextView6.setText(memberinfo.getSite());
 
         mListener.onFragmentInteraction(data.getMemberinfo().getAvatar(),data.getMemberinfo().getSignature());
 

@@ -12,18 +12,25 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spannable;
+import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.longyuan.bitunionpyro.R;
+import com.longyuan.bitunionpyro.ReplayList.ReplyListActivity;
 import com.longyuan.bitunionpyro.api.BUService;
 import com.longyuan.bitunionpyro.injection.DaggerNetworkComponent;
 import com.longyuan.bitunionpyro.injection.NetworkModule;
 import com.longyuan.bitunionpyro.pojo.action.userDetails.UserDetailsRequest;
 import com.longyuan.bitunionpyro.pojo.action.userDetails.UserDetailsResponse;
 import com.longyuan.bitunionpyro.utils.Constant;
+import com.longyuan.bitunionpyro.utils.GlideImageGetter;
+import com.longyuan.bitunionpyro.utils.HtmlHelper;
 import com.longyuan.bitunionpyro.utils.SharedPreferencesHelper;
 
 import java.util.ArrayList;
@@ -36,10 +43,16 @@ import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static com.longyuan.bitunionpyro.utils.HtmlHelper.avatarUrlUpdate;
+
 public class UserdetailsActivity extends AppCompatActivity implements UserDetailsFragment.OnFragmentInteractionListener {
 
+    private final static String TAG = UserdetailsActivity.class.getSimpleName();
 
     public static final String EXTRA_USER_NAME = "USER_NAME";
+
+    public static final String EXTRA_USER_AVATAR = "USER_AVATAR";
+
 
     @Inject
     BUService mBUservice;
@@ -51,9 +64,12 @@ public class UserdetailsActivity extends AppCompatActivity implements UserDetail
     @BindView(R.id.imageView_logo)
     ImageView mImageView_logo;
 
+/*    @BindView(R.id.webView_signature)
+    WebView mWebView_signature;*/
 
+    private  String mUserName;
 
-    String mUserName;
+    private String mUserAvatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +89,15 @@ public class UserdetailsActivity extends AppCompatActivity implements UserDetail
 
         mUserName = getIntent().getStringExtra(EXTRA_USER_NAME);
 
-        getUserDetails(mUserName);
+        mUserAvatar = getIntent().getStringExtra(EXTRA_USER_AVATAR);
+
+        //getUserDetails(mUserName);
+
+
+        //mWebView_signature.getSettings().setJavaScriptEnabled(true);
+
+
+        Glide.with(getApplicationContext()).load(mUserAvatar).into(mImageView_logo);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         if (viewPager != null) {
@@ -176,10 +200,24 @@ public class UserdetailsActivity extends AppCompatActivity implements UserDetail
     @Override
     public void onFragmentInteraction(String url, String signature) {
 
-        mTextView_signature.setText(signature);
 
-//        Glide.with(getApplicationContext()).load(url).into(mImageView_logo);
+        GlideImageGetter imageGetter = new GlideImageGetter(getApplicationContext(),mTextView_signature);
 
+        String htmlString = HtmlHelper.urlDecode(signature);
+        Spannable html;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            html = (Spannable) Html.fromHtml(htmlString, Html.FROM_HTML_MODE_LEGACY, imageGetter, null);
+        } else {
+            html = (Spannable) Html.fromHtml(htmlString, imageGetter, null);
+        }
+
+        mTextView_signature.setText(html);
+
+        //mWebView_signature.loadData(HtmlHelper.urlDecode(signature),"text/html", "UTF-8");
+
+        String logoUrl = avatarUrlUpdate(HtmlHelper.urlDecode(url));
+
+        Log.d(TAG,logoUrl);
 
     }
 }
