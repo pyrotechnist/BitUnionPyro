@@ -25,7 +25,7 @@
             android:name=".login.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ReplayList.ReplyListActivity" />
+        <activity android:name=".replayList.ReplyListActivity" />
         <activity
             android:name=".userdetails.UserdetailsActivity"
             android:label="@string/title_activity_userdetails"

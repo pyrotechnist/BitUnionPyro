@@ -16,7 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.volley.RequestQueue;
-import com.longyuan.bitunionpyro.ReplayList.ReplyListActivity;
+import com.longyuan.bitunionpyro.replayList.ReplyListActivity;
 import com.longyuan.bitunionpyro.api.BUService;
 import com.longyuan.bitunionpyro.injection.DaggerNetworkComponent;
 import com.longyuan.bitunionpyro.injection.NetworkModule;
@@ -24,8 +24,6 @@ import com.longyuan.bitunionpyro.login.LoginActivity;
 import com.longyuan.bitunionpyro.pojo.action.ActionRequestBase;
 import com.longyuan.bitunionpyro.pojo.action.LatestPostList;
 import com.longyuan.bitunionpyro.pojo.action.NewlistItem;
-import com.longyuan.bitunionpyro.pojo.action.reply.ReplyList;
-import com.longyuan.bitunionpyro.pojo.action.reply.ReplyRequest;
 import com.longyuan.bitunionpyro.pojo.login.LoginRequest;
 import com.longyuan.bitunionpyro.pojo.login.LoginResponse;
 import com.longyuan.bitunionpyro.utils.Constant;
@@ -44,8 +42,8 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static com.longyuan.bitunionpyro.ReplayList.ReplyListActivity.EXTRA_POST_ID;
-import static com.longyuan.bitunionpyro.ReplayList.ReplyListActivity.EXTRA_SESSION_ID;
+import static com.longyuan.bitunionpyro.replayList.ReplyListActivity.EXTRA_POST_ID;
+import static com.longyuan.bitunionpyro.replayList.ReplyListActivity.EXTRA_SESSION_ID;
 import static com.longyuan.bitunionpyro.utils.Constant.PREF_PASSWORD;
 import static com.longyuan.bitunionpyro.utils.Constant.PREF_SESSION;
 import static com.longyuan.bitunionpyro.utils.Constant.PREF_USER_NAME;

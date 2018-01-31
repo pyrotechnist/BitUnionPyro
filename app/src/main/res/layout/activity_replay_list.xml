@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.longyuan.bitunionpyro.ReplayList.ReplyListActivity">
+    tools:context="com.longyuan.bitunionpyro.replayList.ReplyListActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/reply_list"

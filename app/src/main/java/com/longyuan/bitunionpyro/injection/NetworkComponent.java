@@ -1,7 +1,7 @@
 package com.longyuan.bitunionpyro.injection;
 
 import com.longyuan.bitunionpyro.HomeActivity;
-import com.longyuan.bitunionpyro.ReplayList.ReplyListActivity;
+import com.longyuan.bitunionpyro.replayList.ReplyListActivity;
 import com.longyuan.bitunionpyro.login.LoginActivity;
 import com.longyuan.bitunionpyro.userdetails.UserDetailsFragment;
 import com.longyuan.bitunionpyro.userdetails.UserdetailsActivity;

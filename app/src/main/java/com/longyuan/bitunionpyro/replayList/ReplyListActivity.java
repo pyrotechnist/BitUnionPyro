@@ -1,4 +1,4 @@
-package com.longyuan.bitunionpyro.ReplayList;
+package com.longyuan.bitunionpyro.replayList;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -6,20 +6,17 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.longyuan.bitunionpyro.R;
 import com.longyuan.bitunionpyro.api.BUService;
 import com.longyuan.bitunionpyro.injection.DaggerNetworkComponent;
 import com.longyuan.bitunionpyro.injection.NetworkModule;
-import com.longyuan.bitunionpyro.pojo.action.NewlistItem;
 import com.longyuan.bitunionpyro.pojo.action.reply.ReplyItem;
 import com.longyuan.bitunionpyro.pojo.action.reply.ReplyList;
 import com.longyuan.bitunionpyro.pojo.action.reply.ReplyRequest;
 import com.longyuan.bitunionpyro.pojo.login.LoginRequest;
 import com.longyuan.bitunionpyro.pojo.login.LoginResponse;
 import com.longyuan.bitunionpyro.utils.Constant;
-import com.longyuan.bitunionpyro.utils.LastPostListAdapter;
 import com.longyuan.bitunionpyro.utils.ReplyListAdapter;
 import com.longyuan.bitunionpyro.utils.SharedPreferencesHelper;
 
