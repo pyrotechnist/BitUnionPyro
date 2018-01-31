@@ -18,6 +18,8 @@ import com.longyuan.bitunionpyro.pojo.action.NewlistItem;
 import com.longyuan.bitunionpyro.pojo.action.reply.ReplyItem;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,21 +64,28 @@ public class ReplyListAdapter extends RecyclerView.Adapter<ReplyListAdapter.Repl
 
         holder.aTextView_reply_author.setText(HtmlHelper.urlDecode(aReply.getAuthor()));
 
-        GlideImageGetter imageGetter = new GlideImageGetter(mContext,holder.aTextView_reply_content);
-
         String htmlString = HtmlHelper.urlDecode(aReply.getMessage());
 
-       // String htmlString = aReply.getMessage();
-       Log.d("adapter",htmlString);
-        Spannable html;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            html = (Spannable) Html.fromHtml(htmlString, Html.FROM_HTML_MODE_LEGACY, imageGetter, null);
-        } else {
-            html = (Spannable) Html.fromHtml(htmlString, imageGetter, null);
-        }
+        Pattern p = Pattern.compile("(.*<\\/table><\\/center><br\\/>)(.*)");
+        Matcher m = p.matcher(htmlString);
 
-        Log.d("Spannable html",html.toString());
-        holder.aTextView_reply_content.setText(html);
+        String stringContent = "";
+
+        String stringQuote="";
+
+        if(m.find())
+        {
+            stringQuote = m.group(1);
+
+            updateTextview(stringQuote,holder.aTextView_reply_qoute);
+
+            stringContent = m.group(2);
+
+            updateTextview(stringContent,holder.aTextView_reply_content);
+        }else {
+
+            updateTextview(htmlString,holder.aTextView_reply_content);
+        }
 
         //holder.aTextView_reply_content.setText(HtmlHelper.urlDecode(aReply.getMessage()));
 
@@ -85,6 +94,22 @@ public class ReplyListAdapter extends RecyclerView.Adapter<ReplyListAdapter.Repl
             Glide.with(mContext).load(avatarUrlUpdate(HtmlHelper.urlDecode(aReply.getAvatar()))).into(holder.aImageView_reply_avatar);
            // Log.d("before update ",HtmlHelper.urlDecode(aReply.getAvatar()));
           //  Log.d("after update",avatarUrlUpdate(HtmlHelper.urlDecode(aReply.getAvatar())));
+
+    }
+
+
+    private void updateTextview(String htmlString,TextView textView){
+
+        GlideImageGetter imageGetter = new GlideImageGetter(mContext,textView);
+
+        Spannable html;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            html = (Spannable) Html.fromHtml(htmlString, Html.FROM_HTML_MODE_LEGACY, imageGetter, null);
+        } else {
+            html = (Spannable) Html.fromHtml(htmlString, imageGetter, null);
+        }
+
+        textView.setText(html);
 
     }
 
@@ -131,6 +156,9 @@ public class ReplyListAdapter extends RecyclerView.Adapter<ReplyListAdapter.Repl
 
         @BindView(R.id.reply_content)
         TextView aTextView_reply_content;
+
+        @BindView(R.id.reply_quote)
+        TextView aTextView_reply_qoute;
 
         @BindView(R.id.reply_avatar)
         ImageView aImageView_reply_avatar;
