@@ -49,8 +49,8 @@ public class HtmlHelper {
       /*  Log.d("before",out);
         String stringOut = htmlDecode(out);
         Log.d("after",stringOut);*/
-
-        out = out.replace("<br>", "<br/>");
+        out = out.replaceAll("(<br[\\s\\\\]*>\\s*){2,}", "<br>");
+        //out = out.replace("<br>", "<br/>");
         return  out;
     }
 

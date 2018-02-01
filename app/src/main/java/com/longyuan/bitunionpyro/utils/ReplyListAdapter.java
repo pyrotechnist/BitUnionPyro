@@ -66,7 +66,7 @@ public class ReplyListAdapter extends RecyclerView.Adapter<ReplyListAdapter.Repl
 
         String htmlString = HtmlHelper.urlDecode(aReply.getMessage());
 
-        Pattern p = Pattern.compile("(.*<\\/table><\\/center><br\\/>)(.*)");
+        Pattern p = Pattern.compile("([\\S+\\n\\r\\s]+<\\/table><\\/center><br[\\s\\/]*>)([\\S+\\n\\r\\s]+)");
         Matcher m = p.matcher(htmlString);
 
         String stringContent = "";
@@ -77,12 +77,18 @@ public class ReplyListAdapter extends RecyclerView.Adapter<ReplyListAdapter.Repl
         {
             stringQuote = m.group(1);
 
+            Log.d("Group 1 ", stringQuote);
+
             updateTextview(stringQuote,holder.aTextView_reply_qoute);
 
             stringContent = m.group(2);
 
+            Log.d("Group 2 ", stringContent);
+
             updateTextview(stringContent,holder.aTextView_reply_content);
         }else {
+
+            Log.d("No group", htmlString);
 
             updateTextview(htmlString,holder.aTextView_reply_content);
         }
